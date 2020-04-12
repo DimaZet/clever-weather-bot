@@ -1,10 +1,10 @@
-from decoder import Decoder
-from forecasting import Weather
+from decoderclient import DecoderClient
+from forecasting import WeatherClient
 
 
-class Helper:
-    decoder = Decoder()
-    weather = Weather()
+class ForecastingService:
+    decoder = DecoderClient()
+    weather = WeatherClient()
 
     def complex_forecast_on_tomorrow(self, address: str) -> str:
         coords = self.decoder.decode(address)
@@ -13,5 +13,5 @@ class Helper:
 
 
 if __name__ == "__main__":
-    r = Helper().complex_forecast_on_tomorrow('Москва Льва Толстого 16')
+    r = ForecastingService().complex_forecast_on_tomorrow('Москва Льва Толстого 16')
     print(r)

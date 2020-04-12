@@ -4,7 +4,7 @@ import os
 from telegram.ext import CommandHandler
 from telegram.ext import Updater
 
-from helper import Helper
+from forecastingservice import ForecastingService
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -14,7 +14,7 @@ logging.basicConfig(
 updater = Updater(token=os.environ['BOT_TOKEN'], use_context=True)
 dispatcher = updater.dispatcher
 
-helper = Helper()
+helper = ForecastingService()
 
 
 def whats_the_weather(update, context):

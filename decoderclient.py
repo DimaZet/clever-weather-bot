@@ -3,7 +3,7 @@ import os
 import requests
 
 
-class Decoder:
+class DecoderClient:
 
     def __init__(self):
         self.__token__ = os.environ['GEOCODER_TOKEN']
@@ -25,5 +25,5 @@ class Decoder:
 
 
 if __name__ == '__main__':
-    r = Decoder().decode('Москва+Льва+Толстого+16')
+    r = DecoderClient().decode('Москва+Льва+Толстого+16')
     print(r['lon'], r['lat'])

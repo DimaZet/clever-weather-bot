@@ -3,7 +3,7 @@ import os
 import requests
 
 
-class Weather:
+class WeatherClient:
 
     def __init__(self):
         self.__token__ = os.environ['WEATHER_TOKEN']
@@ -28,5 +28,5 @@ class Weather:
 
 
 if __name__ == '__main__':
-    r = Weather().get_weather(55.45, 37.37, 1)
+    r = WeatherClient().get_weather(55.45, 37.37, 1)
     print(r)
