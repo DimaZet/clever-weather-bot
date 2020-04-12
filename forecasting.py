@@ -1,32 +1,50 @@
-import os
-
-import requests
-
-
-class WeatherClient:
-
-    def __init__(self):
-        self.__token__ = os.environ['WEATHER_TOKEN']
-
-    def get_weather(self, lat: float = 0, lon: float = 0, offset: int = 1) -> (int, int, str):
-        r = requests.get(
-            url='https://api.weather.yandex.ru/v1/forecast',
-            params={
-                'lat': lat,
-                'lon': lon
-            },
-            headers={
-                'X-Yandex-API-Key': self.__token__
-            }
-        )
-        day = r.json()['forecasts'][offset]['parts']['day']
-        return {
-            'temp_avg': day['temp_avg'],
-            'feels_like': day['feels_like'],
-            'condition': day['condition']
-        }
+from decoder import DecoderClient
+from weather import WeatherClient
 
 
-if __name__ == '__main__':
-    r = WeatherClient().get_weather(55.45, 37.37, 1)
+class ForecastingService:
+    decoder = DecoderClient()
+    weather = WeatherClient()
+
+    def complex_forecast_on_tomorrow(self, address: str) -> dict:
+        coords = self.decoder.decode(address)
+        forecast = self.weather.get_weather(**coords)
+        c = forecast['condition']
+        if self.__is_rainy__(c):
+            forecast['take'] = 'umbrella'
+        elif self.__is_snowy__(c):
+            forecast['take'] = 'mittens'
+        elif self.__is_sunny__(c):
+            forecast['take'] = 'hat'
+        else:
+            forecast['take'] = 'good mood'
+        return forecast
+
+    @staticmethod
+    def __is_rainy__(condition: str) -> bool:
+        return condition in ['partly-cloudy-and-light-rain',
+                             'partly-cloudy-and-rain',
+                             'overcast-and-rain',
+                             'overcast-thunderstorms-with-rain',
+                             'cloudy-and-light-rain',
+                             'overcast-and-light-rain',
+                             'cloudy-and-rain',
+                             'overcast-and-wet-snow']
+
+    @staticmethod
+    def __is_snowy__(condition: str) -> bool:
+        return condition in ['partly-cloudy-and-light-snow',
+                             'partly-cloudy-and-snow',
+                             'overcast-and-snow',
+                             'cloudy-and-light-snow',
+                             'overcast-and-light-snow',
+                             'cloudy-and-snow']
+
+    @staticmethod
+    def __is_sunny__(condition: str) -> bool:
+        return condition in ['clear']
+
+
+if __name__ == "__main__":
+    r = ForecastingService().complex_forecast_on_tomorrow('Москва Льва Толстого 16')
     print(r)

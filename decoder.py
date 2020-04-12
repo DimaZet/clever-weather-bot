@@ -19,8 +19,13 @@ class DecoderClient:
                 'apikey': self.__token__,
                 'geocode': self.__prepare__(address)
             }
-        ).json()['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos']
-        pos = [float(x) for x in resp.split()]
+        ).json()
+
+        if resp['response']['GeoObjectCollection']['metaDataProperty']['GeocoderResponseMetaData']['found'] == '0':
+            raise ValueError('wrong address')
+
+        point = resp['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos']
+        pos = [float(x) for x in point.split()]
         return {'lon': pos[0], 'lat': pos[1]}
 
 
