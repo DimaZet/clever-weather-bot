@@ -19,15 +19,17 @@ helper = ForecastingService()
 
 def whats_the_weather(update, context):
     if context.args:
-        recommendations = helper.complex_forecast_on_tomorrow(' '.join(context.args))
+        r = helper.complex_forecast_on_tomorrow(' '.join(context.args))
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=recommendations
+            text="Tomorrow it will be {} degrees, it feels like {}, it's {} outside. Take your {}".format(
+                r['temp_avg'], r['feels_like'], r['condition'].replace('-', ' '), r['take']
+            )
         )
     else:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="please write address with command"
+            text="Please write address with command"
         )
 
 
