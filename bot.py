@@ -39,7 +39,20 @@ def whats_the_weather(update, context):
         )
 
 
+def help(update, context):
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Send me: /weather your address"
+    )
+
+
 weather_handler = CommandHandler('weather', whats_the_weather)
 dispatcher.add_handler(weather_handler)
+
+start_handler = CommandHandler('start', help)
+dispatcher.add_handler(start_handler)
+
+help_handler = CommandHandler('help', help)
+dispatcher.add_handler(help_handler)
 
 updater.start_polling()
