@@ -6,19 +6,20 @@ import requests
 class Weather:
 
     def __init__(self):
-        self.token = os.environ['WEATHER_TOKEN']
+        self.__token__ = os.environ['WEATHER_TOKEN']
 
-    def get_weather(self, lat: float, lon: float, offset: int) -> (int, int):
-        day = requests.get(
+    def get_weather(self, lat: float = 0, lon: float = 0, offset: int = 1) -> (int, int):
+        r = requests.get(
             url='https://api.weather.yandex.ru/v1/forecast',
             params={
                 'lat': lat,
                 'lon': lon
             },
             headers={
-                'X-Yandex-API-Key': self.token
+                'X-Yandex-API-Key': self.__token__
             }
-        ).json()['forecasts'][offset]['day']['day']
+        )
+        day = r.json()['forecasts'][offset]['parts']['day']
         return day['temp_avg'], day['feels_like']
 
 

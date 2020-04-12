@@ -6,7 +6,7 @@ import requests
 class Decoder:
 
     def __init__(self):
-        self.token = os.environ['GEOCODER_TOKEN']
+        self.__token__ = os.environ['GEOCODER_TOKEN']
 
     def __prepare__(self, address: str) -> str:
         return address  # TODO
@@ -16,7 +16,7 @@ class Decoder:
             url='https://geocode-maps.yandex.ru/1.x',
             params={
                 'format': 'json',
-                'apikey': self.token,
+                'apikey': self.__token__,
                 'geocode': self.__prepare__(address)
             }
         ).json()['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos']
